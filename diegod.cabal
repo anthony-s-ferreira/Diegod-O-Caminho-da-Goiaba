@@ -1,0 +1,34 @@
+name:                diegod
+version:             0.1.0.0
+-- synopsis:
+-- description:
+category:            Web
+build-type:          Simple
+cabal-version:       >=1.10
+
+library
+  hs-source-dirs:      src
+  exposed-modules:     Diegod
+                     , Controls
+                     , UI
+  build-depends:       base >= 4.7 && < 5
+                     , brick
+                     , containers
+                     , linear
+                     , microlens
+                     , microlens-th
+                     , random
+                     , vty
+                     , MonadRandom
+  default-language:    Haskell2010
+
+executable diegod
+  hs-source-dirs:      app
+  main-is:             Main.hs
+  ghc-options:         -threaded -Wall -fno-warn-unused-do-bind -O3
+  build-depends:       base >= 4.7 && < 5
+                     , diegod
+                     , directory
+                     , filepath
+                     , optparse-applicative
+  default-language:    Haskell2010
