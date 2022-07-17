@@ -23,13 +23,13 @@ data Tick = Tick
 
 type Name = ()
 
-data Cell = Diegod | Barrier | BarrierBee | Empty
+data Cell = Diegod | Barrier | BarrierBee | Empty | PowerUp
 
--- Constants
+
 minFrameRate :: Int
 minFrameRate = 30000
 
--- App definition
+
 app :: App Game Tick Name
 app = App { appDraw = drawUI
           , appChooseCursor = neverShowCursor
@@ -38,7 +38,7 @@ app = App { appDraw = drawUI
           , appAttrMap = const theMap
           }
 
--- Handling events
+
 handleEvent :: Game -> BrickEvent Name Tick -> EventM Name (Next Game)
 handleEvent g (AppEvent Tick)                       = continue $ step g
 handleEvent g (VtyEvent (V.EvKey V.KUp []))         = continue $ handleUp g
@@ -60,6 +60,7 @@ drawStats :: Game -> Widget Name
 drawStats g = hLimit 11
   $ vBox [ drawScore (g ^. score)
          , padTop (Pad 2) $ drawGameOver (g ^. dead)
+         , padTop (Pad 2) $ drawPause (g ^. paused) (g ^. dead)
          ]
 
 drawScore :: Int -> Widget Name
@@ -69,15 +70,24 @@ drawScore n = withBorderStyle BS.unicodeBold
   $ padAll 1
   $ str $ show n
 
+drawPause :: Bool -> Bool -> Widget Name
+drawPause isPaused isDead= 
+  if (isPaused && (not isDead))
+    then withAttr pausedAttr $ C.hCenter $ str "pausado"
+  else 
+    if(not isDead)
+      then withAttr runAttr $ C.hCenter $ str "corra!"
+    else emptyWidget
+
 drawGameOver :: Bool -> Widget Name
 drawGameOver isDead =
   if isDead
      then withAttr gameOverAttr $ C.hCenter $ str "game over"
-     else emptyWidget
+  else withAttr runAttr $ C.hCenter $ str "sobreviva!"
 
 drawGrid :: Game -> Widget Name
 drawGrid g = withBorderStyle BS.unicodeBold
-  $ B.borderWithLabel (str "------------")
+  $ B.borderWithLabel (str " O caminho da Goiaba ")
   $ vBox rows
   where
     rows = [hBox $ cellsInRow r | r <- [gridHeight - 1,gridHeight - 2..0]]
@@ -86,13 +96,14 @@ drawGrid g = withBorderStyle BS.unicodeBold
     cellAt c
       | c `elem` g^.diegod           = Diegod
       | inBarriers c (g^.barriers) = Barrier
-      | inBarriers c (g^.barriersBee) = BarrierBee
+      | inBarriers c (g^.barriersOtherType) = Barrier
       | otherwise                  = Empty
 
 drawCell :: Cell -> Widget Name
-drawCell Diegod    = withAttr dinoAttr cw
+drawCell Diegod    = withAttr diegodAttr cw
 drawCell Barrier = withAttr barrierAttr cw
 drawCell BarrierBee = withAttr barrierBeeAttr cw
+drawCell PowerUp = withAttr powerUpAttr cw
 drawCell Empty   = withAttr emptyAttr cw
 
 cw :: Widget Name
@@ -100,20 +111,35 @@ cw = str "  "
 
 theMap :: AttrMap
 theMap = attrMap V.defAttr
- [ (dinoAttr, V.yellow `on` V.red)
+ [ (diegodAttr, V.yellow `on` V.red)
+ , (imortalDiegodAttr, V.yellow `on` V.yellow)
  , (barrierAttr, V.blue `on` V.yellow)
  , (barrierBeeAttr, V.red `on` V.red)
- , (gameOverAttr, fg V.green `V.withStyle` V.bold)
+ , (gameOverAttr, fg V.red `V.withStyle` V.bold)
+ , (powerUpAttr, V.white `on` V.white)
+ , (pausedAttr, fg V.white `V.withStyle` V.bold)
+ , (runAttr, fg V.white `V.withStyle` V.bold)
  ]
+
+imortalDiegodAttr :: AttrName
+imortalDiegodAttr = "imortalDiegod"
+
+runAttr :: AttrName
+runAttr = "corra"
 
 gameOverAttr :: AttrName
 gameOverAttr = "gameOver"
 
-dinoAttr, barrierAttr, barrierBeeAttr, emptyAttr :: AttrName
-dinoAttr = "dinoAttr"
+pausedAttr :: AttrName
+pausedAttr = "paused"
+
+diegodAttr, barrierAttr, barrierBeeAttr, emptyAttr :: AttrName
+diegodAttr = "diegodAttr"
 barrierAttr = "barrierAttr"
 barrierBeeAttr = "barrierBeeAttr"
 emptyAttr = "emptyAttr"
+powerUpAttr = "powerUpAttr"
+
 
 counter :: IORef Int
 {-# NOINLINE counter #-}
@@ -127,6 +153,5 @@ playGame = do
     c' <- readIORef counter
     writeBChan chan Tick
     threadDelay (max (65000 - c' * 10) 35000)
-    -- threadDelay 35000
   g <- initGame 0
   customMain (V.mkVty V.defaultConfig) (Just chan) app g

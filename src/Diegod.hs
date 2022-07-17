@@ -2,6 +2,9 @@
 
 module Diegod where
 
+import Control.Monad.Random
+import System.IO.Unsafe
+import System.Random (randomRIO)
 import qualified Data.Map as M
 import Data.Ratio ((%))
 import Control.Monad.Random
@@ -16,10 +19,11 @@ import Data.Sequence(ViewR(..), ViewL(..), viewr, viewl, (|>))
 import Data.Monoid (Any(..), getAny)
 
 data Game = Game
-  { _diegod           :: Diegod
+  { _diegod         :: Diegod
   , _dir            :: Direction
   , _barriers       :: S.Seq Barrier
-  , _barriersBee    :: S.Seq BarrierBee
+  , _barriersOtherType    :: S.Seq Barrier
+  , _powerUpBox     :: S.Seq PowerUpBox
   , _dimns          :: [Dimension]
   , _positions      :: [Position]
   , _positionsMid   :: [PositionMid]
@@ -27,18 +31,22 @@ data Game = Game
   , _diffMap        :: DifficultyMap
   , _dead           :: Bool
   , _paused         :: Bool
+  , _imortal        :: Bool
   , _scoreMod       :: Int
   , _score          :: Score
   , _highscore      :: Score
   , _duckCountdown  :: Int
+  , _imortalCountdown :: Int
   } deriving (Show)
 
 type Score = Int
 type Coord = V2 Int
 type Diegod = [Coord]
 type Barrier = [Coord]
+type PowerUpBox = [Coord]
 type BarrierBee = [Coord]
 type Dimension = V2 Int
+
 data DifficultyMap = DifficultyMap
   { _d0 :: DiffMod
   , _d1 :: DiffMod
@@ -85,17 +93,8 @@ gridWidth, gridHeight :: Int
 gridWidth = 60
 gridHeight = 40
 
-standingDinoV2 :: Diegod
-standingDinoV2 = [V2 8 0, V2 8 1, V2 8 2,
-                V2 9 2, V2 10 2, V2 10 1,
-                V2 10 0, V2 8 3, V2 8 4,
-                 V2 8 5, V2 9 3, V2 9 4, V2 9 5,
-                 V2 10 3, V2 10 4, V2 10 5,
-                 V2 7 4, V2 7 5, V2 11 4, V2 11 5,
-                 V2 14 6]
-
-standingDino :: Diegod
-standingDino = [V2 7 13, V2 8 13, V2 9 13,
+standingDiegod :: Diegod
+standingDiegod = [V2 7 13, V2 8 13, V2 9 13,
                 V2 7 12, V2 8 12,
                 V2 10 12,V2 7 11, V2 8 11,
                 V2 9 11, V2 7 10, V2 8 10,
@@ -113,8 +112,8 @@ standingDino = [V2 7 13, V2 8 13, V2 9 13,
 
 
 
-duckingDino :: Diegod
-duckingDino = [V2 7 6, V2 8 6,
+duckingDiegod :: Diegod
+duckingDiegod = [V2 7 6, V2 8 6,
                V2 7 5, V2 8 5, V2 9 5,
        V2 6 4, V2 7 4, V2 8 4,
        V2 6 3, V2 7 3, V2 8 3,
@@ -138,22 +137,36 @@ levelAmount :: Score
 levelAmount = 100
 
 duckFrames :: Int
-duckFrames = 20
+duckFrames = 10
+
+imortalFrames :: Int
+imortalFrames = 30
+
+barrierCount :: Int
+barrierCount = 0
 
 scoreMap :: M.Map Int Difficulty
 scoreMap = M.fromList $ zip [0 ..] [D0 ..]
 
 step :: Game -> Game
 step g = fromMaybe g $ do
-  guard $ not (g^.dead || g^.paused)
-  return $ fromMaybe (step' g) (die g)
+         guard $ not (g^.dead || g^.paused)
+         return $ fromMaybe (step' g) (die g)
 
 step' :: Game -> Game
-step' = incDifficulty . setHighScore . incScore . move . spawnBarrierOther . move . spawnBarrier .
-          deleteBarrier . adjustStanding . adjustDuckCountdown
+step' = incDifficulty . setHighScore . incScore .  move  .  spawnPowerUpBox . spawnBarrier . move .
+        deleteBarrier . adjustStanding . adjustDuckCountdown . decreaseImortalCountdown 
+
+powerUpImortal :: Game -> Bool
+powerUpImortal g = let nextD = nextDiegod g
+                       nextP = nextPowerUpBoxes g
+                   in getAny $ foldMap (Any . flip inPowerUpBoxes nextP) nextD
 
 adjustDuckCountdown :: Game -> Game
 adjustDuckCountdown = setDirectionFromDuckCountdown . decreaseDuckCountdown
+
+decreaseImortalCountdown :: Game -> Game
+decreaseImortalCountdown g = if g^.imortalCountdown > 0 then g & imortalCountdown %~ subtract 1 else g
 
 setDirectionFromDuckCountdown  :: Game -> Game
 setDirectionFromDuckCountdown g = if (g^.duckCountdown <= 0) && (g^.dir == Duck) then g & dir .~ Still else g
@@ -205,53 +218,59 @@ die g = do
   return $ g & dead .~ True
 
 die' :: Game -> Bool
-die' g = let nextD = nextDino g
+die' g = let nextD = nextDiegod g
              nextB = nextBarriers g
           in getAny $ foldMap (Any . flip inBarriers nextB) nextD
 
-nextDino :: Game -> Diegod
-nextDino g = moveDino g^.diegod
+nextDiegod :: Game -> Diegod
+nextDiegod g = moveDiegod g^.diegod
 
 nextBarriers :: Game -> S.Seq Barrier
 nextBarriers g = moveBarriers g^.barriers
 
+nextOtherTypeBarriers :: Game -> S.Seq Barrier
+nextOtherTypeBarriers g = moveBarriers g^.barriersOtherType
+
+nextPowerUpBoxes :: Game -> S.Seq PowerUpBox
+nextPowerUpBoxes g = movePowerUpBoxes g^.powerUpBox
+
 adjustStanding :: Game -> Game
 adjustStanding g = let d = g^.dir in
   case d of
-    Duck -> if isDinoBottom g then g & diegod .~ duckingDino else g
-    _    -> if isDinoBottom g then g & diegod .~ standingDino else g
+    Duck -> if isDiegodBottom g then g & diegod .~ duckingDiegod else g
+    _    -> if isDiegodBottom g then g & diegod .~ standingDiegod else g
 
 move :: Game -> Game
-move = moveDino . moveBarriers
+move = moveDiegod . moveBarriers . movePowerUpBoxes
 
-moveDino :: Game -> Game
-moveDino g = let d = g^.dir in
+moveDiegod :: Game -> Game
+moveDiegod g = let d = g^.dir in
   case d of
-    Up   -> if shouldStopDino d g then setDinoDir Down g else moveDino' 1 g
-    Down -> if shouldStopDino d g then setDinoDir Still g else
-              (let gNext = moveDino' (-1) g in
-                if isDinoBottom gNext then setDinoDir Still gNext else gNext)
-    Duck -> if shouldStopDino d g then g else moveDino' (-1) g
+    Up   -> if shouldStopDiegod d g then setDiegodDir Down g else moveDiegod' 1 g
+    Down -> if shouldStopDiegod d g then setDiegodDir Still g else
+              (let gNext = moveDiegod' (-1) g in
+                if isDiegodBottom gNext then setDiegodDir Still gNext else gNext)
+    Duck -> if shouldStopDiegod d g then g else moveDiegod' (-1) g
     _    -> g
 
-moveDino' :: Int -> Game -> Game
-moveDino' amt g = g & diegod %~ fmap (+ V2 0 amt)
+moveDiegod' :: Int -> Game -> Game
+moveDiegod' amt g = g & diegod %~ fmap (+ V2 0 amt)
 
-setDinoDir :: Direction -> Game -> Game
-setDinoDir d g = g & dir .~ d
+setDiegodDir :: Direction -> Game -> Game
+setDiegodDir d g = g & dir .~ d
 
-shouldStopDino :: Direction -> Game -> Bool
-shouldStopDino d g = case d of
-  Down -> isDinoBottom g
-  Duck -> isDinoBottom g
-  Up   -> dinoBottom g >= maxHeight
+shouldStopDiegod :: Direction -> Game -> Bool
+shouldStopDiegod d g = case d of
+  Down -> isDiegodBottom g
+  Duck -> isDiegodBottom g
+  Up   -> diegodBottom g >= maxHeight
   _    -> False
 
-isDinoBottom :: Game -> Bool
-isDinoBottom g = dinoBottom g <= 13
+isDiegodBottom :: Game -> Bool
+isDiegodBottom g = diegodBottom g <= 13
 
-dinoBottom :: Game -> Int
-dinoBottom g =
+diegodBottom :: Game -> Int
+diegodBottom g =
   let d = g^.diegod
       (V2 _ y) = head d
   in y
@@ -264,6 +283,12 @@ moveBarrier = fmap (+ V2 (-1) 0)
 
 moveBarrierBee :: Barrier -> Barrier
 moveBarrierBee = fmap (+ V2 (-3) 0)
+
+movePowerUpBoxes :: Game -> Game
+movePowerUpBoxes g = g & powerUpBox %~ fmap movePowerUpBox
+
+movePowerUpBox :: PowerUpBox -> PowerUpBox
+movePowerUpBox = fmap (+ V2 (-1) 0)
 
 deleteBarrier :: Game -> Game
 deleteBarrier g =
@@ -290,6 +315,24 @@ spawnBarrier g =
     _ :> a -> let x = getBarrierLeftmost a in
                 if (gridWidth - x) > d then setDiffMod newDiffMod (addRandomBarrier g) else g
 
+
+spawnPowerUpBox :: Game -> Game
+spawnPowerUpBox g =
+  let (DiffMod wm hm (d:ds)) = getDiffMod g
+      newDiffMod = DiffMod wm hm ds
+  in case viewr $ g^.powerUpBox of
+    EmptyR -> addPowerUpBox g
+    _ :> a -> let x = getPowerUpBoxLeftMost a in
+            if (gridWidth - x) > d then setDiffMod newDiffMod (addPowerUpBox g) else g
+
+getPowerUpBoxLeftMost :: PowerUpBox -> Int
+getPowerUpBoxLeftMost [] = 0
+getPowerUpBoxLeftMost (V2 x _:_) = x
+
+getPowerUpBoxRightMost :: PowerUpBox -> Int
+getPowerUpBoxRightMost [] = gridWidth
+getPowerUpBoxRightMost b = let (V2 x _) = last b in x
+
 getBarrierLeftmost :: Barrier -> Int
 getBarrierLeftmost [] = 0
 getBarrierLeftmost (V2 x _:_) = x
@@ -297,6 +340,14 @@ getBarrierLeftmost (V2 x _:_) = x
 getBarrierRightmost :: Barrier -> Int
 getBarrierRightmost [] = gridWidth
 getBarrierRightmost b = let (V2 x _) = last b in x
+
+
+addPowerUpBox :: Game -> Game
+addPowerUpBox g = 
+  let (V2 w h:rest) = g^.dimns
+      (DiffMod wm hm _) = getDiffMod g
+      newPowerUpBox = makePowerUpBox (V2 (min w wm) (min h hm)) 3
+  in g & powerUpBox %~ (|> newPowerUpBox) & dimns .~ rest
 
 addRandomBarrier :: Game -> Game
 addRandomBarrier g =
@@ -307,28 +358,30 @@ addRandomBarrier g =
 
 addRandomBarrierOther :: Game -> Game
 addRandomBarrierOther g =
-  let (d:ds) = g^.positionsMid in addRandomMidBarrier g & positionsMid .~ ds
-    --Top -> addRandomGroundBarrier g & positionsMid .~ ds
+  let (p:ps) = g^.positionsMid
+  in case p of
+    Mid    -> addRandomMidBarrier g & positionsMid .~ ps
+    Top -> addRandomMidBarrier g & positionsMid .~ ps
 
 addRandomGroundBarrier :: Game -> Game
 addRandomGroundBarrier g =
   let (V2 w h:rest) = g^.dimns
       (DiffMod wm hm _) = getDiffMod g
-      newBarrier = makeBarrier (V2 (min w wm) (min h hm)) 6
+      newBarrier = makeBarrier g (V2 (min w wm) (min h hm)) 6
   in g & barriers %~ (|> newBarrier) & dimns .~ rest
 
 addRandomSkyBarrier :: Game -> Game
 addRandomSkyBarrier g =
   let (V2 w h:rest) = g^.dimns
       (DiffMod wm hm _) = getDiffMod g
-      newBarrier = makeBarrier (V2 (min w wm) (min h hm)) 15
+      newBarrier = makeBarrier g (V2 (min w wm) (min h hm)) 15
   in g & barriers %~ (|> newBarrier) & dimns .~ rest
 
 addRandomMidBarrier :: Game -> Game
 addRandomMidBarrier g =
   let (V2 w h:rest) = g^.dimns
       (DiffMod wm hm _) = getDiffMod g
-      newBarrier = makeBarrierOther (V2 (min w wm) (min h hm)) 0
+      newBarrier = makeBarrierOther g (V2 (min w wm) (min h hm)) 2
   in g & barriers %~ (|> newBarrier) & dimns .~ rest
 
 getRandomN :: Int -> Int
@@ -349,6 +402,20 @@ sortNegativeLs (x:xs)
 pedagio :: [Coord]
 pedagio = [V2 gridWidth 3, V2 gridWidth 2, V2 gridWidth 1, V2 gridWidth 0]
 
+corda :: Int -> [Coord]
+corda altura_corda = [V2 (gridWidth+1) (altura_corda+1), V2 (gridWidth+2) (altura_corda+1),
+                      V2 gridWidth altura_corda, V2 (gridWidth+3) (altura_corda),
+                      V2 (gridWidth+1) (altura_corda-1), V2 (gridWidth+2) (altura_corda-1), V2 (gridWidth+4) (altura_corda-1),
+                      V2 (gridWidth+5) (altura_corda-2)]
+
+powerUpBoxSEQ :: Int -> [Coord]
+powerUpBoxSEQ altura = [V2 (gridWidth+1) (altura+1),
+                     V2 gridWidth altura, V2 (gridWidth + 1) altura, V2 (gridWidth + 2) altura,
+                     V2 (gridWidth+1) (altura-1)]
+
+pool :: [Coord]
+pool = [V2 gridWidth 0,V2 (gridWidth+1) 0,V2 (gridWidth+2) 0,V2 (gridWidth+3) 0,V2 (gridWidth+4) 0]
+
 bee :: Int -> [Coord]
 bee altura_abelha = [V2 gridWidth altura_abelha, V2 (gridWidth+1) altura_abelha, V2 (gridWidth+3) altura_abelha, V2 (gridWidth+5) altura_abelha,
                     V2 (gridWidth-1) (altura_abelha-1), V2 (gridWidth) (altura_abelha-1), V2 (gridWidth+1) (altura_abelha-1), V2 (gridWidth+2) (altura_abelha-1), V2 (gridWidth+4) (altura_abelha-1),  V2 (gridWidth+6) (altura_abelha-1), V2 (gridWidth+7) (altura_abelha-1),
@@ -358,14 +425,26 @@ bee altura_abelha = [V2 gridWidth altura_abelha, V2 (gridWidth+1) altura_abelha,
                     V2 (gridWidth-1) (altura_abelha-5), V2 (gridWidth) (altura_abelha-5), V2 (gridWidth+1) (altura_abelha-5), V2 (gridWidth+2) (altura_abelha-5), V2 (gridWidth+4) (altura_abelha-5), V2 (gridWidth+6) (altura_abelha-5), V2 (gridWidth+7) (altura_abelha-5),
                     V2 gridWidth (altura_abelha-6), V2 (gridWidth+1) (altura_abelha-6), V2 (gridWidth+3) (altura_abelha-6), V2 (gridWidth+5) (altura_abelha-6)]
 
-makeBarrier :: Dimension -> Int -> Barrier
-makeBarrier (V2 w h) altura_abelha =
-   [bee altura_abelha, pedagio]!!(mod ((getRandomLs 2 altura_abelha) !! 0) 2)
+makeBarrier :: Game -> Dimension -> Int -> Barrier
+makeBarrier g (V2 w h) altura_abelha =
+   [bee ((mod (altura_abelha + g^.score) 15) + 15), pedagio, pool, corda (altura_abelha - 4), bee altura_abelha] !! (mod (g^.score) 4)
 
-makeBarrierOther :: Dimension -> Int -> Barrier
-makeBarrierOther (V2 w h) altura_abelha =
-   [[V2 gridWidth 0,V2 (gridWidth+1) 0,V2 (gridWidth+2) 0,V2 (gridWidth+3) 0,V2 (gridWidth+4) 0]]!!0
 
+makeBarrierOther :: Game -> Dimension -> Int -> Barrier
+makeBarrierOther g (V2 w h) altura_abelha =
+   [pool, corda altura_abelha]!!(mod ((getRandomLs 2 altura_abelha) !! 0) 2)
+
+
+
+makePowerUpBox :: Dimension -> Int -> PowerUpBox
+makePowerUpBox (V2 w h) altura =
+   powerUpBoxSEQ altura
+
+inPowerUpBoxes :: Coord -> S.Seq PowerUpBox -> Bool
+inPowerUpBoxes c ps = getAny $ foldMap (Any . inPowerUpBox c) ps
+
+inPowerUpBox :: Coord -> PowerUpBox -> Bool
+inPowerUpBox c p = c `elem` p
 
 inBarriers :: Coord -> S.Seq Barrier -> Bool
 inBarriers c bs = getAny $ foldMap (Any . inBarrier c) bs
@@ -383,10 +462,11 @@ initGame hs = do
   randomPositions <- flip weightedList ((Sky, 1 % 4) : replicate 3 (Ground, 1 % 4)) <$> newStdGen
   randomPositionsMid <- flip weightedList ((Top, 1 % 4) : replicate 3 (Mid, 1 % 4)) <$> newStdGen
   dMap            <- difficultyMap
-  let g = Game { _diegod      = standingDino
+  let g = Game { _diegod      = standingDiegod
                , _dir       = Still
                , _barriers  = S.empty
-               , _barriersBee = S.empty
+               , _barriersOtherType = S.empty
+               , _powerUpBox = S.empty
                , _dimns     = dimensions
                , _positions = randomPositions
                , _positionsMid = randomPositionsMid
@@ -394,10 +474,12 @@ initGame hs = do
                , _diffMap   = dMap
                , _paused    = False
                , _dead      = False
+               , _imortal   = False
                , _scoreMod  = 0
                , _score     = 0
                , _highscore = hs
                , _duckCountdown = -1
+               , _imortalCountdown = -1
                }
   return g
 
@@ -417,6 +499,7 @@ difficultyMap = do
     (DiffMod 3 3 dists4)
     (DiffMod 3 4 dists4)
     (DiffMod 3 4 distsHardest)
+
 
 
 instance Random a => Random (V2 a) where
