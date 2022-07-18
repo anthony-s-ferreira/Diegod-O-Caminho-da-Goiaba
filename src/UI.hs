@@ -107,10 +107,10 @@ drawCell BarrierBee = withAttr barrierBeeAttr cw
 drawCell PowerUp = withAttr powerUpAttr cw
 drawCell PowerUpBox = withAttr powerUpBoxAttr cw
 drawCell Empty   = withAttr emptyAttr cw
-
+ 
 cw :: Widget Name
 cw = str "  "
-
+ 
 theMap :: AttrMap
 theMap = attrMap V.defAttr
  [ (diegodAttr, V.yellow `on` V.red)

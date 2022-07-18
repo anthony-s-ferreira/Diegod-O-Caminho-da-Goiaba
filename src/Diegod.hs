@@ -504,7 +504,7 @@ difficultyMap = do
     (DiffMod 3 3 dists4)
     (DiffMod 3 4 dists4)
     (DiffMod 3 4 distsHardest)
-
+ 
 
 
 instance Random a => Random (V2 a) where

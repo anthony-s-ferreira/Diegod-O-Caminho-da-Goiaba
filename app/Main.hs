@@ -1,5 +1,5 @@
 module Main where
-
+ 
 import UI (playGame)
 import Diegod (Game(..))
 
@@ -18,24 +18,22 @@ opts :: Parser Opts
 opts = Opts
   <$> switch (long "high-score" <> short 's' <> help "Print highscore and exit")
 
-dinoHeader :: String
-dinoHeader = "Dino - a subpar ripoff of chrome's infinite scroller"
+diegodHeader :: String
+diegodHeader = "Diegod"
 
-dinoFooter :: String
-dinoFooter = "Controls - WS or arrow keys to move. p to pause, r to restart, q to quit"
+diegodFooter :: String
+diegodFooter = "Controles - WS ou setas para mover. p para pausar, r para reinicar, q para sair"
 
 fullOpts :: ParserInfo Opts
-fullOpts = info (helper <*> opts) (fullDesc <> header dinoHeader <> footer dinoFooter)
+fullOpts = info (helper <*> opts) (fullDesc <> header diegodHeader <> footer diegodFooter)
 
--- Basically copied from tetris example
 main :: IO ()
 main = do
   (Opts hs) <- execParser fullOpts
-  when hs (getHighScore >>= printM >> exitSuccess) -- show high score and exit
+  when hs (getHighScore >>= printM >> exitSuccess)
   g <- playGame
   handleEndGame (_highscore g)
 
--- Copied from tetris example
 handleEndGame :: Int -> IO ()
 handleEndGame s = do
   mhs <- getHighScore
@@ -43,13 +41,11 @@ handleEndGame s = do
     Nothing -> newHighScore
     Just hs -> if s <= hs then justShowScore else newHighScore
   where
-    justShowScore = putStrLn $ "Your final score: " ++ show s
+    justShowScore = putStrLn $ "Seu score final: " ++ show s
     newHighScore = do
-      putStrLn $ "Congrats! You got the new highest score: " ++ show s
+      putStrLn $ "Seu novo maior score: " ++ show s
       setHighScore s
 
--- High score stuff
--- Copied from tetris example
 getHighScore :: IO (Maybe Int)
 getHighScore = do
   lb <- getLeaderboardFile
@@ -58,21 +54,20 @@ getHighScore = do
      then readMaybe <$> readFile lb
      else return Nothing
 
--- Copied from tetris example
+
 setHighScore :: Int -> IO ()
 setHighScore s = do
   lb <- getLeaderboardFile
   writeFile lb (show s)
 
--- Copied from tetris example
+
 getLeaderboardFile :: IO FilePath
 getLeaderboardFile = do
   xdg <- D.getXdgDirectory D.XdgData "diegod"
   D.createDirectoryIfMissing True xdg
   return (xdg </> "leaderboard")
 
--- Utilities
--- Copied from tetris example
+
 printM :: Show a => Maybe a -> IO ()
 printM Nothing  = putStrLn "None"
 printM (Just s) = print s
