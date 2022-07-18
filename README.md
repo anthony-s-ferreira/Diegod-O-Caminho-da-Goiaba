@@ -15,9 +15,10 @@
 o stack, utilize os seguintes comandos:
 
 ```bash
-sudo apt install libncurses-dev
 git clone https://github.com/anthony-s-ferreira/Diegod-O-Caminho-da-Goiaba.git
 cd Diegod-O-Caminho-da-Goiaba
+sudo apt install libncurses-dev
+sudo apt install cabal-install
 stack install diegod
 ```
 
