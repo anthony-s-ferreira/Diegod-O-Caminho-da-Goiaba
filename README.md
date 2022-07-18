@@ -10,11 +10,6 @@
 
 # Instalação
 
-### Para instalar em macOS, utilize os seguintes comandos:
-```bash
-
-```
-
 ### Para instalar no distros linux:
 É necessário ter [stack](https://docs.haskellstack.org/en/stable/README/#how-to-install). Após instalar
 o stack, utilize os seguintes comandos:
