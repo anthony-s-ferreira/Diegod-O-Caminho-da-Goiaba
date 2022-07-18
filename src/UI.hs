@@ -118,8 +118,8 @@ theMap = attrMap V.defAttr
  , (barrierAttr, V.blue `on` V.yellow)
  , (barrierBeeAttr, V.red `on` V.red)
  , (gameOverAttr, fg V.red `V.withStyle` V.bold)
- , (powerUpBoxAttr, V.white `on` V.white)
- , (powerUpAttr, V.white `on` V.white)
+ , (powerUpBoxAttr, V.black `on` V.black)
+ , (powerUpAttr, V.black `on` V.black)
  , (pausedAttr, fg V.white `V.withStyle` V.bold)
  , (runAttr, fg V.white `V.withStyle` V.bold)
  ]
