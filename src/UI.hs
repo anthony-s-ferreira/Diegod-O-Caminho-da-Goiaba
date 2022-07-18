@@ -23,7 +23,7 @@ data Tick = Tick
 
 type Name = ()
 
-data Cell = Diegod | Barrier | BarrierBee | Empty | PowerUp
+data Cell = Diegod | Barrier | BarrierBee | Empty | PowerUp | PowerUpBox
 
 
 minFrameRate :: Int
@@ -97,6 +97,7 @@ drawGrid g = withBorderStyle BS.unicodeBold
       | c `elem` g^.diegod           = Diegod
       | inBarriers c (g^.barriers) = Barrier
       | inBarriers c (g^.barriersOtherType) = Barrier
+      | inPowerUpBoxes c (g^.powerUpBox) = PowerUpBox
       | otherwise                  = Empty
 
 drawCell :: Cell -> Widget Name
@@ -104,6 +105,7 @@ drawCell Diegod    = withAttr diegodAttr cw
 drawCell Barrier = withAttr barrierAttr cw
 drawCell BarrierBee = withAttr barrierBeeAttr cw
 drawCell PowerUp = withAttr powerUpAttr cw
+drawCell PowerUpBox = withAttr powerUpBoxAttr cw
 drawCell Empty   = withAttr emptyAttr cw
 
 cw :: Widget Name
@@ -116,6 +118,7 @@ theMap = attrMap V.defAttr
  , (barrierAttr, V.blue `on` V.yellow)
  , (barrierBeeAttr, V.red `on` V.red)
  , (gameOverAttr, fg V.red `V.withStyle` V.bold)
+ , (powerUpBoxAttr, V.white `on` V.white)
  , (powerUpAttr, V.white `on` V.white)
  , (pausedAttr, fg V.white `V.withStyle` V.bold)
  , (runAttr, fg V.white `V.withStyle` V.bold)
@@ -132,6 +135,9 @@ gameOverAttr = "gameOver"
 
 pausedAttr :: AttrName
 pausedAttr = "paused"
+
+powerUpBoxAttr :: AttrName
+powerUpBoxAttr = "powerUpBox"
 
 diegodAttr, barrierAttr, barrierBeeAttr, emptyAttr :: AttrName
 diegodAttr = "diegodAttr"

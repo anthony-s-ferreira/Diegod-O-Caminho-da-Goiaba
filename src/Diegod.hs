@@ -31,7 +31,7 @@ data Game = Game
   , _diffMap        :: DifficultyMap
   , _dead           :: Bool
   , _paused         :: Bool
-  , _imortal        :: Bool
+  , _imortalO       :: Bool
   , _scoreMod       :: Int
   , _score          :: Score
   , _highscore      :: Score
@@ -140,7 +140,7 @@ duckFrames :: Int
 duckFrames = 10
 
 imortalFrames :: Int
-imortalFrames = 30
+imortalFrames = 100
 
 barrierCount :: Int
 barrierCount = 0
@@ -148,19 +148,15 @@ barrierCount = 0
 scoreMap :: M.Map Int Difficulty
 scoreMap = M.fromList $ zip [0 ..] [D0 ..]
 
-step :: Game -> Game
+step :: Game -> Game 
 step g = fromMaybe g $ do
          guard $ not (g^.dead || g^.paused)
          return $ fromMaybe (step' g) (die g)
 
 step' :: Game -> Game
 step' = incDifficulty . setHighScore . incScore .  move  .  spawnPowerUpBox . spawnBarrier . move .
-        deleteBarrier . adjustStanding . adjustDuckCountdown . decreaseImortalCountdown 
+        decreaseImortalCountdown . deletePowerUpBox .deleteBarrier . adjustStanding . adjustDuckCountdown
 
-powerUpImortal :: Game -> Bool
-powerUpImortal g = let nextD = nextDiegod g
-                       nextP = nextPowerUpBoxes g
-                   in getAny $ foldMap (Any . flip inPowerUpBoxes nextP) nextD
 
 adjustDuckCountdown :: Game -> Game
 adjustDuckCountdown = setDirectionFromDuckCountdown . decreaseDuckCountdown
@@ -170,6 +166,9 @@ decreaseImortalCountdown g = if g^.imortalCountdown > 0 then g & imortalCountdow
 
 setDirectionFromDuckCountdown  :: Game -> Game
 setDirectionFromDuckCountdown g = if (g^.duckCountdown <= 0) && (g^.dir == Duck) then g & dir .~ Still else g
+
+setDirectionFromImortalCountdown :: Game -> Game
+setDirectionFromImortalCountdown g = if (g^.imortalCountdown <= 0) then g & imortalO .~ False else g
 
 decreaseDuckCountdown :: Game -> Game
 decreaseDuckCountdown g = if g^.duckCountdown > 0 then g & duckCountdown %~ subtract 1 else g
@@ -212,10 +211,12 @@ scoreToDiff sc = let l = sc `div` levelAmount
 incDifficulty :: Game -> Game
 incDifficulty g = g & level .~ scoreToDiff (g^.score)
 
+
+
 die :: Game -> Maybe Game
 die g = do
-  guard $ die' g
-  return $ g & dead .~ True
+  guard $ (die' g) 
+  return $ g & dead .~ (True && not (g^.imortalO) )
 
 die' :: Game -> Bool
 die' g = let nextD = nextDiegod g
@@ -296,6 +297,13 @@ deleteBarrier g =
     EmptyL  -> g
     a :< as -> let x = getBarrierRightmost a in
                  (if x <= 0 then g & barriers .~ as else g)
+
+deletePowerUpBox :: Game -> Game
+deletePowerUpBox g =
+  case viewl $ g^.powerUpBox of
+    EmptyL -> g
+    a :< as -> let x = getPowerUpBoxRightMost a in
+                    (if x <= 0 then g & powerUpBox .~ as else g)
 
 spawnBarrierOther :: Game -> Game
 spawnBarrierOther g =
@@ -429,12 +437,9 @@ makeBarrier :: Game -> Dimension -> Int -> Barrier
 makeBarrier g (V2 w h) altura_abelha =
    [bee ((mod (altura_abelha + g^.score) 15) + 15), pedagio, pool, corda (altura_abelha - 4), bee altura_abelha] !! (mod (g^.score) 4)
 
-
 makeBarrierOther :: Game -> Dimension -> Int -> Barrier
 makeBarrierOther g (V2 w h) altura_abelha =
    [pool, corda altura_abelha]!!(mod ((getRandomLs 2 altura_abelha) !! 0) 2)
-
-
 
 makePowerUpBox :: Dimension -> Int -> PowerUpBox
 makePowerUpBox (V2 w h) altura =
@@ -474,7 +479,7 @@ initGame hs = do
                , _diffMap   = dMap
                , _paused    = False
                , _dead      = False
-               , _imortal   = False
+               , _imortalO   = False
                , _scoreMod  = 0
                , _score     = 0
                , _highscore = hs
@@ -511,3 +516,13 @@ instance Random a => Random (V2 a) where
     let (x, g')  = random g
         (y, g'') = random g'
      in (V2 x y, g'')
+
+--imortalize :: Game -> Game
+--imortalize g = do
+--  guard $ imortalize' g
+--  return $ g & imortalO .~ True
+--
+--imortalize' :: Game -> Bool
+--imortalize' g = let nextD = nextDiegod g
+--                    nextP = nextPowerUpBoxes g
+--                in getAny $ foldMap (Any . flip inPowerUpBoxes nextP) nextD
