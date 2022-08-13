@@ -20,3 +20,24 @@ write("Você perdeu a pontuação x2!"), nl, nl, write("Jogar dado (ganha pontos
 
 perdeCalopsita():- write("A calopsita gigante defendeu você das abelhas e foi embora."),nl, 
 write("Você perdeu a pontuação x3!"), nl, nl, write("Jogar dado (ganha pontos)"), nl, nl.
+
+pisaPoca():- write("Diegod pisou numa poça, cuidado!"),
+nl, nl, write("Jogar dado (ganha pontos)"), nl, nl.
+
+baculejo():- write("Diegod levou um baculejo e perdeu 10 pontos."),
+nl, nl, write("Jogar dado (ganha pontos)"), nl, nl.
+
+pocaFunda():- write("Diegod pisou numa poça funda demais."),nl, 
+write("Você gastou a sua goiaba dourada e não morrerá afogado!"), nl, nl, write("Jogar dado (ganha pontos)"), nl, nl.
+
+ataqueAbeia():- write("Diegod foi perseguido por abelhas."),nl, 
+write("Você gastou a sua goiaba dourada e não será picado!"), nl, nl, write("Jogar dado (ganha pontos)"), nl, nl.
+
+derrotaPoca():- write("VOCÊ PERDEU!"),nl, 
+write("Diegod pisou numa poça funda demais e se afogou!"), nl, nl.
+
+derrotaAbeia():- write("VOCÊ PERDEU!"),nl, 
+write("Diegod levou uma picada de abelha!"), nl, nl.
+
+derrotaBaculejo():- write("VOCÊ PERDEU!"),nl, 
+write("Diegod levou baculejos demais e perdeu todos os pontos!"), nl, nl.
