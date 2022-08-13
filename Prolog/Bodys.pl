@@ -23,7 +23,7 @@ write(" \\( )/   ''"), nl, write("  L | "), nl, nl, write("Digite J para jogar o
 pocaDoCao():- write(" (-_-)  "), nl, write("  ( )"), nl, 
 write("  L |"), nl, write("--------"), nl, nl, write("Digite J para jogar o dado").
 
-baculejoSimples():- write("             ___"), write("           _| * |_"), nl, write(" (-_-)      (-_-)      "), nl, 
+baculejoSimples():- write("             ___"), nl,write("           _| * |_"), nl, write(" (-_-)      (-_-)      "), nl, 
 write("  ( )-(10)  -( )>   "), nl, write("  L |        L L   "), nl, nl, write("Digite J para jogar o dado").
 
 pocaMtFunda():- write("      ()"), nl, write(" (>_<)/"), nl, 
