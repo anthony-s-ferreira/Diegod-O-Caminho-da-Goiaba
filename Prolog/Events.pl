@@ -9,7 +9,7 @@ nl, nl.
 moto():- write("Diegod ganhou uma 50tinha, pontuação x2 por 5 rodadas."),nl, 
 write("Cuidado com os policiais!"), nl, nl, write("Jogar dado (ganha pontos)"), nl, nl.
 
-calopisita():- write("Diegod achou a calopsita gigante, pontuação x3 por 5 rodadas."),
+calopsita():- write("Diegod achou a calopsita gigante, pontuação x3 por 5 rodadas."),
 nl, nl, write("Jogar dado (ganha pontos)"), nl, nl.
 
 goiaba():- write("Diegod achou a goiaba dourada, não perderá pontos ou morrerá!"),nl, 
