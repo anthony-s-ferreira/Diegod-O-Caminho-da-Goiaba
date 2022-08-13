@@ -37,7 +37,31 @@ Jogar dado (ganha pontos)
 
 Pontuação (532)
 
+Diegod achou a calopsita gigante, pontuação x3 por 5 rodadas.
+
+Jogar dado (ganha pontos)
+
+ (^_^)   (^)>
+ \( )/   (/)
+  L |    ''
+
+
+Pontuação (532)
+
+Diegod achou a goiaba dourada, não perderá pontos ou morrerá!
+A goiaba dourada só será usada uma vez.
+
+Jogar dado (ganha pontos)
+
+ (^_^)    \ | /
+ \( )/   - ( ) -
+  L |     / | \
+
+
+Pontuação (532)
+
 Diegod foi pego pela polícia e perdeu a 50tinha!
+Você perdeu a pontuação x2!
 
 Jogar dado (ganha pontos)
 
@@ -47,6 +71,18 @@ Jogar dado (ganha pontos)
   ( )   <( )>   |----| 
   L |    L L    @    @
 
+
+Pontuação (532)
+
+A calopsita gigante defendeu você das abelhas e foi embora.
+Você perdeu a pontuação x3!
+
+Jogar dado (ganha pontos)
+
+         (^)>  *( ) * *          
+ (;_;)   (/)   * * *
+ \( )/   ''
+  L |    
 
 Pontuação (532)
 
@@ -60,26 +96,54 @@ Jogar dado (ganha pontos)
 --------
 
 
-Pontuação (532)
+Pontuação (522)
 
-Diegod achou a calopsita gigante, pontuação x3 por 5 rodadas.
+Diegod levou um baculejo e perdeu 10 pontos.
+
+Jogar dado (ganha pontos)
+             ___
+           _| * |_
+ (-_-)      (-_-)      
+  ( )-(10)  -( )>   
+  L |        L L   
+
+
+Pontuação (522)
+
+Diegod levou um baculejo.
+Você gastou a sua goiaba dourada e não perdeu pontos!
+
+Jogar dado (ganha pontos)
+             ___
+           _| * |_
+ (-_-)      (-_-)      
+  ( )-()    -( )>   
+  L |        L L   
+
+
+Pontuação (522)
+
+Diegod pisou numa poça funda demais.
+Você gastou a sua goiaba dourada e não morrerá afogado!
 
 Jogar dado (ganha pontos)
 
- (^_^)   (^)>
- \( )/   (/)
-  L |    ''
+      ()
+ (>_<)/
+--------
 
+Pontuação (522)
 
-Pontuação (532)
-
-Diegod achou a goiaba dourada, não perderá pontos ou morrerá por 3 rodadas!
+Diegod foi perseguido por abelhas.
+Você gastou a sua goiaba dourada e não será picado!
 
 Jogar dado (ganha pontos)
 
- (^_^)    \ | /
- \( )/   - ( ) -
-  L |     / | \
+*( ) *  
+  *    
+           (>_<)
+*  * *      ( )      
+* ()* *     L |        
 
 
 VOCÊ PERDEU!
@@ -114,14 +178,4 @@ Pontuação final: 0 pontos
   ( )   <( )>   
   L |    L L   
 
-Pontuação (522)
-
-Diegod levou um baculejo e perdeu 10 pontos.
-
-Jogar dado (ganha pontos)
-             ___
-           _| * |_
- (-_-)      (-_-)      
-  ( )-(10)  -( )>   
-  L |        L L   
 
