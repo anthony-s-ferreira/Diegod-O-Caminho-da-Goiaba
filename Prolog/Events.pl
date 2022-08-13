@@ -17,3 +17,6 @@ write("A goiaba dourada só será usada uma vez."),nl, nl, write("Jogar dado (ga
 
 baculejoMotoquinha():- write("Diegod foi pego pela polícia e perdeu a 50tinha!"),nl, 
 write("Você perdeu a pontuação x2!"), nl, nl, write("Jogar dado (ganha pontos)"), nl, nl.
+
+perdeCalopsita():- write("A calopsita gigante defendeu você das abelhas e foi embora."),nl, 
+write("Você perdeu a pontuação x3!"), nl, nl, write("Jogar dado (ganha pontos)"), nl, nl.

@@ -16,3 +16,6 @@ write("  L |     / | \\"), nl, nl, write("Digite J para jogar o dado").
 baculejoMoto():- write("         ___"), nl, write("       _| * |_"), nl, 
 write(" (-_-)  (-_-)       -!"),  nl, write("  ( )   <( )>   |----| "), 
 nl, write("  L |    L L    @    @"), nl, nl, write("Digite J para jogar o dado").
+
+voaCalopsita():- write("         (^)>  *( ) * *     "), nl, write(" (;_;)   (/)   * * *"), nl, 
+write(" \\( )/   ''"), nl, write("  L | "), nl, nl, write("Digite J para jogar o dado").
