@@ -8,7 +8,9 @@ random(1,6,R), nl,
 write("Você tirou "), write(R), write("!"), nl, nl, dado(R), 
 addPontos(X,R,P), 
 position(P, RD, L), 
-event(L).
+event(L,F), 
+(F -> read(I), play(I, P, RD);
+not(F) -> write("Você morreu!")).
 
 
 % play("A"):-

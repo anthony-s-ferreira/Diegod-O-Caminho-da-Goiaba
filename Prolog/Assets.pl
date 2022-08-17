@@ -7,8 +7,8 @@
 % 3 nada
 % 4 abelhas
 
-event(0):- box, foundBox.
-event(1):- pisaPoca, pocaDoCao.
-event(2):- baculejo, baculejoSimples.
-event(3):- noEvent, none.
-event(4):- derrotaAbeia, ataqueDasAbeia.
+event(0,R):- box, foundBox, R = true.
+event(1,R):- pisaPoca, pocaDoCao, R = true.
+event(2,R):- baculejo, baculejoSimples, R = true.
+event(3,R):- noEvent, none, R = true.
+event(4,R):- derrotaAbeia, ataqueDasAbeia, R = false.
