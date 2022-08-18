@@ -4,4 +4,4 @@
 main:- 
 menu,
 read(J),
-play(J, 0, 0).
+play(J, 0, 0, false, 0, 0).
