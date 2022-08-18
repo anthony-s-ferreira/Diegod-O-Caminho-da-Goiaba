@@ -4,25 +4,48 @@
 :- include('Assets.pl').
 :- include('PowerUps.pl').
 
-play("J", X, RD, _, BN, M):-
-random(1,6,R), nl,
-write("Você tirou "), write(R), write("!"), nl, nl, dado(R),
-%Se tiver pontos a serem multiplicados
-(BN > 0 -> Pts is M * R, BN1 is BN -1, MT = M;
-BN == 0, M > 1 -> Pts = R, BN1 = 0, MT = 0;
-BN == 0 -> Pts = R, BN1 = 0, MT = M),
-addPontos(X,Pts,P), 
-position(P, L), 
-event(L,F,B,MT,D),
-%D é verdade se ele quase morrer ou perder o bônus
-(D -> MT = 0, BN1 = 0;
-not(D) -> MT = M, BN1 = BN),
-RD1 is RD + 1,
-%F for false é pq ele morreu
-(F -> read(I),nl,play(I, P, RD1, B, BN1, MT);
-not(F) -> write("Você morreu em "), write(RD1), write(" rodadas!")).
+play("J", Pontuacao, Rodadas, _, Bonus, Multiplicador):-
+    random(1,6,Random), nl,
+    write("Você tirou "), 
+    write(Random), 
+    write("!"), nl, 
+    nl, 
+    dado(Random),
 
-play("ABRIR", X, RD, true, BN, M):-
-(X > 10 -> power_up(X,R,V,P), removePontos(X,10,X1),event(P), read(I), nl, play(I, X1, RD, false, R, V);
-not(X > 10) -> nl, write("Você não tem pontos suficientes"), nl, read(I), play(I, X, RD, false, BN, M)).
+    %Se tiver pontos a serem multiplicados
+
+    (Bonus > 0 -> Pontos is Multiplicador * Random, 
+                  BonusPlus is Bonus -1, 
+                  MultiplicadorPlus = Multiplicador;
+
+    Bonus == 0, 
+
+    Multiplicador > 1 -> Pontos = Random, 
+                         BonusPlus = 0, 
+                         MultiplicadorPlus = 0;
+
+    Bonus == 0 -> Pontos = Random, 
+    BonusPlus = 0, 
+    MultiplicadorPlus = Multiplicador),
+    addPontos(Pontuacao,Pontos,PontuacaoAtual), 
+    position(PontuacaoAtual, Localizacao), 
+    event(Localizacao,CondicaoVida,CheckBonus,MultiplicadorPlus,QuaseMorreu),
+    %QuaseMorreu é verdade se ele quase morrer ou perder o bônus
+    (QuaseMorreu -> MultiplicadorPlus = 0, BonusPlus = 0;
+    not(QuaseMorreu) -> MultiplicadorPlus = Multiplicador, BonusPlus = Bonus),
+    RodadasPlus is Rodadas + 1,
+    %CondicaoVida for false é pq ele morreu
+    (CondicaoVida -> read(Input),nl,play(Input, PontuacaoAtual, RodadasPlus, CheckBonus, BonusPlus, MultiplicadorPlus);
+    not(CondicaoVida) -> write("Você morreu em "), write(RodadasPlus), write(" rodadas!")).
+
+play("ABRIR", Pontuacao, Rodadas, true, Bonus, Multiplicador):-
+(Pontuacao > 10 -> power_up(Pontuacao,Random,MultiplicadorPowerUp,PontuacaoAtual), 
+removePontos(Pontuacao,10,PontosRemovidos),event(PontuacaoAtual), 
+read(Input), 
+nl, 
+play(Input, PontosRemovidos, Rodadas, false, Random, MultiplicadorPowerUp);
+not(Pontuacao > 10) -> nl, write("Você não tem pontos suficientes"), 
+                       nl, 
+                       read(Input), 
+                       play(Input, Pontuacao, Rodadas, false, Bonus, Multiplicador)).
 
