@@ -32,3 +32,7 @@ event(1,R,B,M,D):- pocaMortal(X),
 event(2,R,B,_,D):- baculejo, baculejoSimples, R = true, B = false,D = false.
 event(3,R,B,_,D):- noEvent, none, R = true, B = false,D = false.
 event(4,R,B,_,D):- derrotaAbeia, abeiaDefeat, R = false, B = false, D = true.
+
+event("G"):- goiaba, goibaDourada.
+event("C"):- calopsita, calopisitaGigante.
+event("M"):- moto, cinquentinha.
