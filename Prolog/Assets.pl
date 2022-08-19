@@ -117,9 +117,17 @@ event(2,CondicaoVida,CheckBonus,Multiplicador,QuaseMorreu, Pontuacao):-
     ).
     
 
-event(3,CondicaoVida,CheckBonus,_,QuaseMorreu, _):- 
-    noEvent, 
-    none, 
+event(3, CondicaoVida, CheckBonus, Multiplicador,QuaseMorreu, _):-
+    noEvent,
+    (Multiplicador == 0 -> none;
+
+     Multiplicador == 1 -> noneGoiaba;
+
+     Multiplicador == 2 -> noneCinquentinha;
+
+     Multiplicador == 3 -> noneCalopsita
+    ),
+    
     CondicaoVida = true, 
     CheckBonus = false,
     QuaseMorreu = false.
@@ -139,15 +147,15 @@ event(4,CondicaoVida,CheckBonus,Multiplicador,QuaseMorreu, _):-
     ).
     
 
-event("G"):- 
+event("Goiaba"):- 
     goiaba, 
     goibaDourada.
 
-event("C"):- 
+event("Calopsita"):- 
     calopsita, 
     calopisitaGigante.
 
-event("Multiplicador"):- 
+event("Motoquinha"):- 
     moto, 
     cinquentinha.
 

@@ -51,15 +51,15 @@ play(1, Pontuacao, Rodadas, _, Bonus, Multiplicador):-
                          write(" rodadas!")).
 
 play(2, Pontuacao, Rodadas, true, Bonus, Multiplicador):-
-(Pontuacao > 10 -> power_up(Pontuacao,Random,MultiplicadorPowerUp,PontuacaoAtual), 
-                   removePontos(Pontuacao,10,PontosRemovidos),
-                   event(PontuacaoAtual), 
-                   read(Input), 
-                   nl, 
-                   play(Input, PontosRemovidos, Rodadas, false, Random, MultiplicadorPowerUp);
-                   not(Pontuacao > 10) -> nl, 
-                                          write("Você não tem pontos suficientes"), 
-                   nl, 
-                   read(Input), 
-                   play(Input, Pontuacao, Rodadas, false, Bonus, Multiplicador)).
+    (Pontuacao > 9 -> power_up(Pontuacao,Random,MultiplicadorPowerUp,PontuacaoAtual), 
+                      removePontos(Pontuacao,10,PontosRemovidos),
+                      event(PontuacaoAtual), 
+                      read(Input), 
+                      nl, 
+                      play(Input, PontosRemovidos, Rodadas, false, Random, MultiplicadorPowerUp);
+    not(Pontuacao > 9) -> nl, 
+                          write("Você não tem pontos suficientes"), 
+                          nl, 
+                          read(Input), 
+                          play(Input, Pontuacao, Rodadas, false, Bonus, Multiplicador)).
 

@@ -1,9 +1,17 @@
 
-power_up(X,R,V,P):- C is (X*2) mod 3, G is (X ^ 2) mod 2, R=5,
-( G == 1 -> P = "G", V=1;
-  C == 0 -> P ="C", V=3;
-  not(C==0), not(G==1) -> P = "M", V=2
-).
+power_up(Pontuacao,R,PowerUp,PowerUpName):- 
+  Calculo is (Pontuacao * 2) mod 3, 
+  Goiaba is (Pontuacao ^ 2) mod 2, 
+  R = 5,
+  ( Goiaba == 1 -> PowerUpName = "Goiaba", 
+                   PowerUp = 1;
+
+    Calculo == 0 -> PowerUpName ="Calopsita", 
+                    PowerUp = 3;
+
+    not(Calculo==0), not(Goiaba==1) -> PowerUpName = "Motoquinha", 
+                                       PowerUp = 2
+  ).
 
 % Calopsita: se o dobro da pontuação é divisível por 3
 % Motoquinha: se nenhuma outra condição for atendida
