@@ -16,7 +16,7 @@ pocaMortal(X):-
     X = (Mod == 0).
 
 
-event(0,CondicaoVida,CheckBonus,Multiplicador,false, Pontuacao, Pontuacao):- 
+event(0,CondicaoVida,CheckBonus,Multiplicador,false, Pontuacao, Pontuacao):- animation(Multiplicador),
     HaPontos = (Pontuacao >= 10),
     (
     not(HaPontos) -> boxNoPoints,
@@ -54,7 +54,7 @@ event(0,CondicaoVida,CheckBonus,Multiplicador,false, Pontuacao, Pontuacao):-
                           CheckBonus = true).
 
 
-event(1,CondicaoVida,CheckBonus,Multiplicador,QuaseMorreu, Pontuacao, Pontuacao):- 
+event(1,CondicaoVida,CheckBonus,Multiplicador,QuaseMorreu, Pontuacao, Pontuacao):- animation(Multiplicador),
     pocaMortal(X),
     (Multiplicador == 1 -> pocaFunda, 
                            pocaMtFunda, 
@@ -86,7 +86,7 @@ event(1,CondicaoVida,CheckBonus,Multiplicador,QuaseMorreu, Pontuacao, Pontuacao)
               CheckBonus = false,
               QuaseMorreu = true).
 
-event(2,CondicaoVida,CheckBonus,Multiplicador,QuaseMorreu, Pontuacao, NovaPontuacao):- 
+event(2,CondicaoVida,CheckBonus,Multiplicador,QuaseMorreu, Pontuacao, NovaPontuacao):- animation(Multiplicador),
     TemPontos = (Pontuacao >= 10),
 
     (Multiplicador == 1 -> baculejoGoiabaDourada,
@@ -119,6 +119,7 @@ event(2,CondicaoVida,CheckBonus,Multiplicador,QuaseMorreu, Pontuacao, NovaPontua
     
 
 event(3, CondicaoVida, CheckBonus, Multiplicador, false, Pontuacao, Pontuacao):- %nada aconteceu
+    animation(Multiplicador),
     noEvent,
     (Multiplicador == 0 -> none,
                            CondicaoVida = true, 
@@ -174,3 +175,8 @@ show(Total):-
     write(Total),
     nl, 
     nl.
+
+
+animation(Multiplicador):-
+    (Multiplicador == 2)-> random(1,3,Time),ghostRiderDiegod(Time),sleep(Time);
+    random(1,3,Time),walkingDiegod(Time),sleep(Time).

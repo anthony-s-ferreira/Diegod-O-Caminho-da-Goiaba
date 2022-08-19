@@ -152,3 +152,33 @@ baculejoDefeat:-
     write(" (ಠ~ಠ)  (ò_ó)      "), nl,
     write(" \\( )/  <( )>   "), nl, 
     write("  L |    L L   "), nl, nl.
+
+
+walkingDiegod(X):-K is X * 3/4,nl,nl,nl,nl,write("('_')"), nl, write(" ( )"), nl, 
+write(" L |         ?"),nl,write("Diegod esta andando."),nl,nl,sleep(K),
+nl,nl,nl,nl,write("     ('_')"), nl, write("      ( )"), nl, 
+write("      | L      ?"),nl,write("Diegod esta andando.."),nl,nl,sleep(K),
+nl,nl,nl,nl,write("           (- 3-)"), nl, write("           ( )"), nl, 
+write("           L |  ?"),nl,write("Diegod esta andando..."),nl,nl.
+
+ghostRiderDiegod(X):-K is X * 1/3,nl,nl,nl,
+               write(" ( ͡° ͜ʖ ͡°)  "), nl, 
+               write("  ( )-!"), nl, 
+               write(" |----| "),nl, 
+               write(" @    @"), nl, nl, 
+               write("Diegod NA CINQUENTINHA PEEEGA!"), nl,sleep(K),nl,nl,nl,nl,nl,nl,
+               write("            ( ͡° ͜ʖ ͡°)  "), nl, 
+               write("             ( )-!"), nl, 
+               write("            |----| "),nl, 
+               write("            @    @"), nl, nl, 
+               write("Diegod NA CINQUENTINHA PEEEGA!!"), nl,sleep(K),nl,nl,nl,nl,nl,nl,
+               write("                 ( ͡° ͜ʖ ͡°)  "), nl, 
+               write("                  ( )-!"), nl, 
+               write("                 |----| "),nl, 
+               write("                 @    @"), nl, nl, 
+               write("Diegod NA CINQUENTINHA PEEEGA!!!"), nl,sleep(K),nl,nl,nl,nl,nl,nl,
+               write("                       ( ͡° ͜ʖ ͡°)  "), nl, 
+               write("                        ( )-!"), nl, 
+               write("                       |----| "),nl, 
+               write("                       @    @"), nl, nl, 
+               write("Diegod NA CINQUENTINHA PEEEGA!!!!"), nl,sleep(K).
