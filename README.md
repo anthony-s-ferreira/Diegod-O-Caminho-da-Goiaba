@@ -10,7 +10,7 @@
 
 # Instalação
 
-### Para instalar no distros linux:
+### Para instalar em distros linux:
 É necessário ter [stack](https://docs.haskellstack.org/en/stable/README/#how-to-install). Após instalar
 o stack, utilize os seguintes comandos:
 
@@ -43,7 +43,11 @@ Para ver seu maior score, execute `diegod --high-score`.
 
 <h1 align="center"> Prolog </h1>
 
-# Como jogar
+# Instalação
+
+### Para instalar em distros linux:
+É necessário ter [swipl](https://www.swi-prolog.org/versions.txt). Após instalar
+o swipl, utilize os seguintes comandos:
 
 ### Para jogar no Windows/Linux:
 ```bash
@@ -56,7 +60,7 @@ main.
 ```
 
 ## Comandos
-Para jogar,digite main. e depois siga as instruções do jogo.
+Para jogar, digite main. e depois siga as instruções do jogo.
 
 ## Como jogar
 
