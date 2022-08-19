@@ -1,7 +1,7 @@
 :- include('Events.pl').
 :- include('Bodies.pl').
 :- include('Pontuacao.pl').
-
+ 
 % 0 caixa
 % 1 poça -> pode ou não ser mortal
 % 2 policia
@@ -92,11 +92,13 @@ event(2,CondicaoVida,CheckBonus,Multiplicador,QuaseMorreu, Pontuacao, NovaPontua
     (Multiplicador == 1 -> baculejoGoiabaDourada,
                            baculejoGoiaba,
                            QuaseMorreu = true,
+                           CondicaoVida = true,
                            NovaPontuacao is Pontuacao;
 
      Multiplicador == 2 -> baculejoMotoquinha,
                            baculejoMoto,
                            QuaseMorreu = true,
+                           CondicaoVida = true,
                            NovaPontuacao is Pontuacao;
 
      not(TemPontos), not(Multiplicador == 2), not(Multiplicador == 1) -> derrotaBaculejo,
@@ -142,6 +144,7 @@ event(4,CondicaoVida,CheckBonus,1,QuaseMorreu, Pontuacao, Pontuacao):-
                            CheckBonus = false,
                            QuaseMorreu = true,
                            write("Retornei a goiaba").
+
 event(4,CondicaoVida,CheckBonus,_,QuaseMorreu, _, _):- 
                                 derrotaAbeia, 
                                 abeiaDefeat, 

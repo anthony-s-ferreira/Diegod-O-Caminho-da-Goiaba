@@ -4,7 +4,7 @@
 :- include('Assets.pl').
 :- include('PowerUps.pl').
 
-play(1, Pontuacao, Rodadas, false, Bonus, Multiplicador):-
+play(1, Pontuacao, Rodadas, _, Bonus, Multiplicador):-
     random(1,6,Random),
     write("Você tirou "), 
     write(Random), 
@@ -14,7 +14,7 @@ play(1, Pontuacao, Rodadas, false, Bonus, Multiplicador):-
     %Se tiver pontos a serem multiplicados
     (Bonus > 0 -> Pontos is Multiplicador * Random, 
                   BonusPlus is Bonus -1, 
-                  MultiplicadorPlus = Multiplicador,
+                  MultiplicadorPlus is Multiplicador + 1 - 1,
                   write("------------------------------BOnus >1!!!!!!1------------------------------");
 
     Bonus == 0, Multiplicador >= 1 -> Pontos = Random, 
@@ -28,12 +28,15 @@ play(1, Pontuacao, Rodadas, false, Bonus, Multiplicador):-
     addPontos(Pontuacao,Pontos,PontuacaoAtual), 
 
     position(EventoAleatorio), 
-
+    write("Pegou qual evento"),
     event(EventoAleatorio, CondicaoVida, CheckBonus, MultiplicadorPlus, QuaseMorreu, PontuacaoAtual, NovaPontuacao),
     write("Saiu do evento"),
+
     RodadasPlus is (Rodadas + 1),
     write("Somou rodada"),
-    (QuaseMorreu -> MultiplicadorPlus = 0; 
+
+    (not(CondicaoVida) -> write("Você perdeu.");
+        QuaseMorreu -> MultiplicadorPlus is 0 * 3, write("ASD"); 
     not(QuaseMorreu) -> MultiplicadorPlus is Multiplicador, write("FALSETED")),
     write(" checou quase morte"),
     %CondicaoVida for false é pq ele morreu
