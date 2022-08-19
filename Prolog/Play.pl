@@ -44,7 +44,7 @@ play("J", Pontuacao, Rodadas, _, Bonus, Multiplicador):-
                      nl,
                      play(Input, PontuacaoAtual, RodadasPlus, CheckBonus, BonusPlus, MultiplicadorPlus);
     
-    not(CondicaoVida), RodadasPlus == 1 -> write("Você morreu em uma rodada, que azar!");
+    not(CondicaoVida), RodadasPlus == 1 -> write("Você morreu na primeira rodada, que azar!");
 
     not(CondicaoVida) -> write("Você morreu em "), 
                          write(RodadasPlus), 

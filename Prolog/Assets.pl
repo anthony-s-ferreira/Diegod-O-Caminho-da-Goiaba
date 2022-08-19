@@ -23,7 +23,7 @@ event(0,CondicaoVida,CheckBonus,Multiplicador,QuaseMorreu, Pontuacao):-
                      foundBoxNoPoints,
                      CondicaoVida = true, 
                      CheckBonus = false, 
-                     QuaseMorreu = false;
+                     QuaseMorreu = true;
 
     Multiplicador == 1 -> box, 
                            write("Ao abrir esta caixa você perderá a goiaba dourada"), 
@@ -32,7 +32,7 @@ event(0,CondicaoVida,CheckBonus,Multiplicador,QuaseMorreu, Pontuacao):-
                            foundBox, 
                            CondicaoVida = true, 
                            CheckBonus = true, 
-                           QuaseMorreu = false;
+                           QuaseMorreu = true;
 
     Multiplicador == 2 -> box, 
                           write("Ao abrir esta caixa você perderá a cinquentinha"), 
@@ -124,12 +124,20 @@ event(3,CondicaoVida,CheckBonus,_,QuaseMorreu, _):-
     CheckBonus = false,
     QuaseMorreu = false.
 
-event(4,CondicaoVida,CheckBonus,_,QuaseMorreu, _):- 
-    derrotaAbeia, 
-    abeiaDefeat, 
-    CondicaoVida = false, 
-    CheckBonus = false, 
-    QuaseMorreu = true.
+event(4,CondicaoVida,CheckBonus,Multiplicador,QuaseMorreu, _):- 
+    (Multiplicador == 1 -> ataqueAbeia,
+                           ataqueDasAbeia,
+                           CondicaoVida = true,
+                           CheckBonus = false,
+                           QuaseMorreu = true;
+
+     not(Multiplicador == 1) -> derrotaAbeia, 
+                                abeiaDefeat, 
+                                CondicaoVida = false, 
+                                CheckBonus = false, 
+                                QuaseMorreu = true
+    ).
+    
 
 event("G"):- 
     goiaba, 
