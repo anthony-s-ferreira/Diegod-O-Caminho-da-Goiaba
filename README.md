@@ -42,6 +42,24 @@ Para ver seu maior score, execute `diegod --high-score`.
 * **q** para sair
 
 <h1 align="center"> Prolog </h1>
-<h4 align="center"> 
-    :construction:  Projeto em construção  :construction:
-</h4>
+
+# Como jogar
+
+### Para jogar no Windows/Linux:
+```bash
+git clone https://github.com/anthony-s-ferreira/Diegod-O-Caminho-da-Goiaba.git
+cd Diegod-O-Caminho-da-Goiaba
+cd Prolog
+swipl
+main.
+```
+
+## Comandos
+Para jogar,digite main. e depois siga as instruções do jogo.
+
+## Como jogar
+
+* **J.** para fazer sua jogada.(Rodar o dado)
+* **Abrir.** para abrir a caixa.
+
+
