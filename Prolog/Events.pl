@@ -60,6 +60,14 @@ perdeCalopsita:-
     nl, 
     nl.
 
+passaPoca:-
+    write("Diegod passou por uma pocinha(pequeninha), cuidado!"),
+    nl, 
+    nl, 
+    write("Jogar dado (ganha pontos)"), 
+    nl, 
+    nl.
+
 pisaPoca:- 
     write("Diegod pisou numa poça, cuidado!"),
     nl, 

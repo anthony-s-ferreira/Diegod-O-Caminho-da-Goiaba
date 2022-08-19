@@ -1,7 +1,7 @@
 :- include('Events.pl').
 :- include('Bodies.pl').
 :- include('Pontuacao.pl').
- 
+
 % 0 caixa
 % 1 poça -> pode ou não ser mortal
 % 2 policia
@@ -62,13 +62,13 @@ event(1,CondicaoVida,CheckBonus,Multiplicador,QuaseMorreu, Pontuacao, Pontuacao)
                            CheckBonus = false, 
                            QuaseMorreu = true, !;
     
-    Multiplicador == 2 -> noEvent, 
+    Multiplicador == 2 -> passaPoca, 
                           cinquentinha, 
                           CondicaoVida = true, 
                           CheckBonus = false,
                           QuaseMorreu = true, !;
 
-    Multiplicador == 3 -> noEvent, 
+    Multiplicador == 3 -> passaPoca, 
                           calopisitaGigante, 
                           CondicaoVida = true, 
                           CheckBonus = false,

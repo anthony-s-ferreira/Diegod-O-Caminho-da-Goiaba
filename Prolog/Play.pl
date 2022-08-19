@@ -36,14 +36,15 @@ play(1, Pontuacao, Rodadas, _, Bonus, Multiplicador):-
     write("Somou rodada"),
 
     (not(CondicaoVida) -> write("Você perdeu.");
-        QuaseMorreu -> MultiplicadorPlus is 0 * 3, write("ASD"); 
-    not(QuaseMorreu) -> MultiplicadorPlus is Multiplicador, write("FALSETED")),
+        QuaseMorreu -> write("ASD"), MultiplicadorFinal is (0 * 3), write("ASD"); 
+    not(QuaseMorreu) -> MultiplicadorFinal is Multiplicador, write("FALSETED");
+        MultiplicadorFinal is 0),
     write(" checou quase morte"),
     %CondicaoVida for false é pq ele morreu
     (CondicaoVida -> read(Input), write("------------------------------Leu input------------------------------"),
                      nl,
                      
-                     play(Input, NovaPontuacao, RodadasPlus, CheckBonus, BonusPlus, MultiplicadorPlus);
+                     play(Input, NovaPontuacao, RodadasPlus, CheckBonus, BonusPlus, MultiplicadorFinal);
     
     not(CondicaoVida), RodadasPlus == 1 -> write("Você perdeu na primeira rodada, que azar!");
 
