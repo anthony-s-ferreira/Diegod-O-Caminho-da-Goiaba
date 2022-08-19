@@ -43,7 +43,7 @@ Para ver seu maior score, execute `diegod --high-score`.
 
 <h1 align="center"> Prolog </h1>
 
-# Como jogar
+# Instalação
 
 ### Para jogar no Windows/Linux:
 ```bash
@@ -56,7 +56,7 @@ main.
 ```
 
 ## Comandos
-Para jogar,digite main. e depois siga as instruções do jogo.
+Para jogar, digite main. e depois siga as instruções do jogo.
 
 ## Como jogar
 
