@@ -16,19 +16,17 @@ play(1, Pontuacao, Rodadas, _, Bonus, Multiplicador):-
                   BonusPlus is Bonus -1, 
                   MultiplicadorPlus = Multiplicador;
 
-    Bonus == 0, 
-
-    Multiplicador > 1 -> Pontos = Random, 
+    Bonus == 0, Multiplicador > 1 -> Pontos = Random, 
                          BonusPlus = 0, 
                          MultiplicadorPlus = 0;
 
-    Bonus == 0 -> Pontos = Random, 
+    Bonus == 0, not(Multiplicador > 1) -> Pontos = Random, 
     BonusPlus = 0, 
     MultiplicadorPlus = Multiplicador),
 
     addPontos(Pontuacao,Pontos,PontuacaoAtual), 
 
-    position(PontuacaoAtual, Localizacao), 
+    position(Localizacao), 
 
     event(Localizacao,CondicaoVida,CheckBonus,MultiplicadorPlus,QuaseMorreu, PontuacaoAtual),
 
@@ -50,13 +48,13 @@ play(1, Pontuacao, Rodadas, _, Bonus, Multiplicador):-
                          write(" rodadas!")).
 
 play(2, Pontuacao, Rodadas, true, Bonus, Multiplicador):-
-    (Pontuacao > 9 -> power_up(Pontuacao,Bonus,MultiplicadorPowerUp,PowerUpName), 
+    (Pontuacao >= 10 -> power_up(BonusPlus,MultiplicadorPowerUp,PowerUpName), 
                       removePontos(Pontuacao,10,PontosRemovidos),
                       event(PowerUpName), 
                       read(Input), 
                       nl, 
-                      play(Input, PontosRemovidos, Rodadas, false, Bonus, MultiplicadorPowerUp), !;
-    not(Pontuacao > 9) -> nl, 
+                      play(Input, PontosRemovidos, Rodadas, false, BonusPlus, MultiplicadorPowerUp);
+    (Pontuacao < 10) -> nl, 
                           write("Você não tem pontos suficientes"), 
                           nl, 
                           read(Input), 
