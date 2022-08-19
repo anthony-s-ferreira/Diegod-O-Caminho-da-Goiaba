@@ -28,6 +28,7 @@ write("|                                                                        
 write("|                                                                         ''                    |"),nl,
 write("|                                            DIEGOD                                             |"),nl,
 write("|                                      O caminho da goiaba                                      |"),nl, blank,nl,
+write("|                                       Diego como Diegod                                       |"),nl,
 write("|                                     Anthony (Toms Wenzin)                                     |"),nl,
 write("|                                     Bruno (Lancho Wenzin)                                     |"),nl,
 write("|                                    Henrique (Wenzin Wenzin)                                   |"),nl,
