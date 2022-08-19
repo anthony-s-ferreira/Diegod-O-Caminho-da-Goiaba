@@ -4,7 +4,7 @@
 :- include('Assets.pl').
 :- include('PowerUps.pl').
 
-play("J", Pontuacao, Rodadas, _, Bonus, Multiplicador):-
+play(1, Pontuacao, Rodadas, _, Bonus, Multiplicador):-
     random(1,6,Random), nl,
     write("Você tirou "), 
     write(Random), 
@@ -50,7 +50,7 @@ play("J", Pontuacao, Rodadas, _, Bonus, Multiplicador):-
                          write(RodadasPlus), 
                          write(" rodadas!")).
 
-play("ABRIR", Pontuacao, Rodadas, true, Bonus, Multiplicador):-
+play(2, Pontuacao, Rodadas, true, Bonus, Multiplicador):-
 (Pontuacao > 10 -> power_up(Pontuacao,Random,MultiplicadorPowerUp,PontuacaoAtual), 
                    removePontos(Pontuacao,10,PontosRemovidos),
                    event(PontuacaoAtual), 
