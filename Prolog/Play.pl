@@ -5,11 +5,10 @@
 :- include('PowerUps.pl').
 
 play(1, Pontuacao, Rodadas, _, Bonus, Multiplicador):-
-    random(1,6,Random), nl,
+    random(1,6,Random),
     write("Você tirou "), 
     write(Random), 
     write("!"), nl, 
-    nl, 
     dado(Random),
 
     %Se tiver pontos a serem multiplicados
@@ -37,7 +36,7 @@ play(1, Pontuacao, Rodadas, _, Bonus, Multiplicador):-
     (QuaseMorreu -> MultiplicadorPlus = 0, BonusPlus = 0;
 
     not(QuaseMorreu) -> MultiplicadorPlus = Multiplicador, BonusPlus = Bonus),
-    RodadasPlus is Rodadas + 1,
+                        RodadasPlus is Rodadas + 1,
 
     %CondicaoVida for false é pq ele morreu
     (CondicaoVida -> read(Input),
@@ -51,12 +50,12 @@ play(1, Pontuacao, Rodadas, _, Bonus, Multiplicador):-
                          write(" rodadas!")).
 
 play(2, Pontuacao, Rodadas, true, Bonus, Multiplicador):-
-    (Pontuacao > 9 -> power_up(Pontuacao,Random,MultiplicadorPowerUp,PontuacaoAtual), 
+    (Pontuacao > 9 -> power_up(Pontuacao,Bonus,MultiplicadorPowerUp,PowerUpName), 
                       removePontos(Pontuacao,10,PontosRemovidos),
-                      event(PontuacaoAtual), 
+                      event(PowerUpName), 
                       read(Input), 
                       nl, 
-                      play(Input, PontosRemovidos, Rodadas, false, Random, MultiplicadorPowerUp);
+                      play(Input, PontosRemovidos, Rodadas, false, Bonus, MultiplicadorPowerUp), !;
     not(Pontuacao > 9) -> nl, 
                           write("Você não tem pontos suficientes"), 
                           nl, 

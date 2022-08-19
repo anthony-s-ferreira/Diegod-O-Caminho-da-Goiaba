@@ -13,3 +13,7 @@ addPontos(Pontos,Variavel,Total):-
 removePontos(Pontos,Variavel,Total):- 
     Total is Pontos - Variavel, 
     show(Total).
+
+:- discontiguous removePontos/3.
+:- discontiguous addPontos/3.
+:- discontiguous show/1.

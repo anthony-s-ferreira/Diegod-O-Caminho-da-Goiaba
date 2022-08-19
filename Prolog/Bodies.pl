@@ -86,8 +86,8 @@ cinquentinha:- write(" ( ͡° ͜ʖ ͡°)  "), nl,
                write("Digite 1 para jogar o dado"), nl.
 
 calopisitaGigante:- write("  (♥‿♥)  (^)>"), nl, 
-                    write("  \\( )/   (/)"), nl, 
-                    write("   L |    ''"), nl, nl, 
+                    write("  \\( )/  (/)"), nl, 
+                    write("   L |   ''"), nl, nl, 
                     write("Digite 1 para jogar o dado"), nl.
 
 goibaDourada:- write("  (¬‿¬)      \\ | /"), nl, 
@@ -142,7 +142,7 @@ abeiaDefeat:-
 baculejoGoiaba:- 
     write("                ___"), nl, 
     write("              _| * |_"), nl, 
-    write("(ಠ╭╮ಠ)        (Õ_Õ)      "), nl,
+    write(" (ಠ╭╮ಠ)        (Õ_Õ)      "), nl,
     write("  ( )--O       <( )>   "), nl, 
     write("  L |           L L   "), nl, nl.
 

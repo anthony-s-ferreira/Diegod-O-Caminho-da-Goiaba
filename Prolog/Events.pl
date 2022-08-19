@@ -111,7 +111,7 @@ baculejo:-
     nl.
 
 baculejoGoiabaDourada:-
-    wirte("Diegod levou baculejo e perdeu sua goiaba dourada!"),
+    write("Diegod levou baculejo e perdeu sua goiaba dourada!"),
     nl, 
     nl, 
     write("Jogar dado (ganha pontos)"), 
