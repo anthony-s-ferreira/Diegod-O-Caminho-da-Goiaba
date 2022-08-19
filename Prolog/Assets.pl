@@ -142,17 +142,14 @@ event(4,CondicaoVida,CheckBonus,1,QuaseMorreu, Pontuacao, Pontuacao):-
                            ataqueDasAbeia,
                            CondicaoVida = true,
                            CheckBonus = false,
-                           QuaseMorreu = true,
-                           write("Retornei a goiaba").
+                           QuaseMorreu = true.
 
 event(4,CondicaoVida,CheckBonus,_,QuaseMorreu, _, _):- 
                                 derrotaAbeia, 
                                 abeiaDefeat, 
                                 CondicaoVida = false, 
                                 CheckBonus = false,
-                                QuaseMorreu = true,
-                                write("Retornei a morte")
-    .
+                                QuaseMorreu = true.
     
 
 eventPower("Goiaba"):- 

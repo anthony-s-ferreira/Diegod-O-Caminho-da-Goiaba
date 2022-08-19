@@ -14,34 +14,28 @@ play(1, Pontuacao, Rodadas, _, Bonus, Multiplicador):-
     %Se tiver pontos a serem multiplicados
     (Bonus > 0 -> Pontos is Multiplicador * Random, 
                   BonusPlus is Bonus -1, 
-                  MultiplicadorPlus is Multiplicador + 1 - 1,
-                  write("------------------------------BOnus >1!!!!!!1------------------------------");
+                  MultiplicadorPlus is Multiplicador + 1 - 1;
 
     Bonus == 0, Multiplicador >= 1 -> Pontos = Random, 
-                         BonusPlus = 0, 
-                         MultiplicadorPlus = 0, write("------------------------------BOnus == 0 multi > 1------------------------------");  
+                         BonusPlus = 0;  
 
     Bonus == 0, Multiplicador == 0 -> Pontos = Random, 
     BonusPlus = 0, 
-    MultiplicadorPlus = Multiplicador, write("------------------------------BOnus == 0------------------------------")),
+    MultiplicadorPlus = Multiplicador),
 
     addPontos(Pontuacao,Pontos,PontuacaoAtual), 
 
-    position(EventoAleatorio), 
-    write("Pegou qual evento"),
+    position(EventoAleatorio),
     event(EventoAleatorio, CondicaoVida, CheckBonus, MultiplicadorPlus, QuaseMorreu, PontuacaoAtual, NovaPontuacao),
-    write("Saiu do evento"),
 
     RodadasPlus is (Rodadas + 1),
-    write("Somou rodada"),
 
     (not(CondicaoVida) -> write("Você perdeu.");
-        QuaseMorreu -> write("ASD"), MultiplicadorFinal is (0 * 3), write("ASD"); 
-    not(QuaseMorreu) -> MultiplicadorFinal is Multiplicador, write("FALSETED");
+        QuaseMorreu ->  MultiplicadorFinal is (0 * 3); 
+    not(QuaseMorreu) -> MultiplicadorFinal is Multiplicador;
         MultiplicadorFinal is 0),
-    write(" checou quase morte"),
     %CondicaoVida for false é pq ele morreu
-    (CondicaoVida -> read(Input), write("------------------------------Leu input------------------------------"),
+    (CondicaoVida -> read(Input),
                      nl,
                      
                      play(Input, NovaPontuacao, RodadasPlus, CheckBonus, BonusPlus, MultiplicadorFinal);
@@ -54,7 +48,6 @@ play(1, Pontuacao, Rodadas, _, Bonus, Multiplicador):-
 
 play(2, Pontuacao, Rodadas, true, Bonus, Multiplicador):-
     (Pontuacao >= 10 ->
-                      write("------------------------------Maior que 10------------------------------"),
                       power_up(BonusPlus,MultiplicadorPowerUp,PowerUpName), 
                       removePontos(Pontuacao, PontosRemovidos),
                       eventPower(PowerUpName), 
