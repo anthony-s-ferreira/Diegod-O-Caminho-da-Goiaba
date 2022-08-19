@@ -1,7 +1,8 @@
-show(Total):- 
-    write("Pontuação ("), 
-    write(Total), 
-    write(")"), 
+:- discontiguous show/1.
+:- discontiguous addPontos/3.
+:- discontiguous removePontos/3.
+
+show(Total):- write("Pontuação "), write(Total), 
     nl, 
     nl.
 
