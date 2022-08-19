@@ -60,8 +60,7 @@ Para jogar,digite main. e depois siga as instruções do jogo.
 
 ## Como jogar
 
-* **0.** para ver os créditos
-* **1.** para fazer sua jogada.(Rodar o dado)
-* **2.** para abrir a caixa.
+* **J.** para fazer sua jogada.(Rodar o dado)
+* **"ABRIR."** para abrir a caixa.
 
 
