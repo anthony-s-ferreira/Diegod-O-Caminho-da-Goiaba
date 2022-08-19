@@ -1,3 +1,15 @@
-show(P):- write("Pontuação ("), write(P), write(")"), nl, nl.
-addPontos(X,R,P):- P is R + X, show(P).
-removePontos(X,R,P):- P is X - R, show(P).
+show(Total):- 
+    write("Pontuação ("), 
+    write(Total), 
+    write(")"), 
+    nl, 
+    nl.
+
+
+addPontos(Pontos,Variavel,Total):- 
+    Total is Variavel + Pontos, 
+    show(Total).
+
+removePontos(Pontos,Variavel,Total):- 
+    Total is Pontos - Variavel, 
+    show(Total).
