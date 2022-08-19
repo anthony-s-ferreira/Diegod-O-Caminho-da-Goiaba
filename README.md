@@ -51,6 +51,7 @@ git clone https://github.com/anthony-s-ferreira/Diegod-O-Caminho-da-Goiaba.git
 cd Diegod-O-Caminho-da-Goiaba
 cd Prolog
 swipl
+consult("Main.pl").
 main.
 ```
 
@@ -60,6 +61,6 @@ Para jogar,digite main. e depois siga as instruções do jogo.
 ## Como jogar
 
 * **J.** para fazer sua jogada.(Rodar o dado)
-* **Abrir.** para abrir a caixa.
+* **"ABRIR."** para abrir a caixa.
 
 
