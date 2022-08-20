@@ -5,9 +5,11 @@
 <p align="center">
   </p>
 
-<div align="center">
 
-<h3 align="center"> Diegod e a sua Goiaba Dourada </h3>
+
+<h3 align="center"> <a href = "https://github.com/DiegoCruzz">Diegod</a> e a sua Goiaba Dourada </h3>
+
+<div align="center">
 <img src = "https://user-images.githubusercontent.com/72308168/185725359-5c4e7229-67e6-4b9f-981b-63e4e019e2cb.png" width="200"px/>
 </div>
 
