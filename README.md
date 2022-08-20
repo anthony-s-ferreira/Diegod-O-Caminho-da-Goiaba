@@ -17,6 +17,7 @@ o stack, utilize os seguintes comandos:
 ```bash
 git clone https://github.com/anthony-s-ferreira/Diegod-O-Caminho-da-Goiaba.git
 cd Diegod-O-Caminho-da-Goiaba
+cd Haskell
 sudo apt install libncurses-dev
 sudo apt install cabal-install
 export PATH=~/.local/bin:$PATH
@@ -64,7 +65,7 @@ Para jogar, digite main. e depois siga as instruções do jogo.
 
 ## Como jogar
 
-* **0.** para ver os créditos
+* **0.** para ver os créditos. (No menu)
 * **1.** para fazer sua jogada.(Rodar o dado)
 * **2.** para abrir a caixa.
 
