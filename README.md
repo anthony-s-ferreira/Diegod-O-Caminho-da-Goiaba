@@ -78,3 +78,7 @@ Para jogar, digite main. e depois siga as instruções do jogo.
 * **2.** para abrir a caixa.
 
 
+## Contribuidores
+
+| [<img src="https://avatars.githubusercontent.com/u/72308168?v=4" width=115><br><sub>Anthony Ferreira</sub>](https://github.com/anthony-s-ferreira) |  [<img src="https://avatars.githubusercontent.com/u/109104329?v=4" width=115><br><sub>Bruno Grangeiro</sub>](https://github.com/Bruno-Grangeiro) |  [<img src="https://avatars.githubusercontent.com/u/79461006?v=4" width=115><br><sub>Henrique Oliveira</sub>](https://github.com/Henrikdo) |[<img src="https://avatars.githubusercontent.com/u/56745829?v=4" width=115><br><sub>Mirlla Marques</sub>](https://github.com/mirllamarques) |[<img src="https://avatars.githubusercontent.com/u/71851489?v=4" width=115><br><sub>Otavio Cipriano</sub>](https://github.com/CiprianoOtavio) |[<img src="https://avatars.githubusercontent.com/u/44899195?v=4" width=115><br><sub>Thiago Santos</sub>](https://github.com/Thiago-Santos-SI) |
+| :---: | :---: | :---: | :---: | :---: | :---: 
