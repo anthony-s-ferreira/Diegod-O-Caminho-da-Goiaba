@@ -25,7 +25,8 @@ play(1, Pontuacao, Rodadas, _, Bonus, Multiplicador):-
 
     addPontos(Pontuacao,Pontos,PontuacaoAtual), 
 
-    position(EventoAleatorio),
+    position(Rodadas, EventoAleatorio),
+    
     event(EventoAleatorio, CondicaoVida, CheckBonus, MultiplicadorPlus, QuaseMorreu, PontuacaoAtual, NovaPontuacao),
 
     RodadasPlus is (Rodadas + 1),

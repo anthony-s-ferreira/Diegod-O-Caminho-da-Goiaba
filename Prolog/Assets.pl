@@ -3,9 +3,9 @@
 :- include('Pontuacao.pl').
 
 % 0 caixa
-% 1 poça -> pode ou não ser mortal
+% 1 nada
 % 2 policia
-% 3 nada
+% 3 poça -> pode ou não ser mortal
 % 4 abelhas
 
 %Para a poça matar ele afogado será gerado um número aleatório de 1 até 100
@@ -54,7 +54,7 @@ event(0,CondicaoVida,CheckBonus,Multiplicador,false, Pontuacao, Pontuacao):- ani
                           CheckBonus = true).
 
 
-event(1,CondicaoVida,CheckBonus,Multiplicador,QuaseMorreu, Pontuacao, Pontuacao):- animation(Multiplicador),
+event(3,CondicaoVida,CheckBonus,Multiplicador,QuaseMorreu, Pontuacao, Pontuacao):- animation(Multiplicador),
     pocaMortal(X),
     (Multiplicador == 1 -> pocaFunda, 
                            pocaMtFunda, 
@@ -118,7 +118,7 @@ event(2,CondicaoVida,CheckBonus,Multiplicador,QuaseMorreu, Pontuacao, NovaPontua
     ).
     
 
-event(3, CondicaoVida, CheckBonus, Multiplicador, false, Pontuacao, Pontuacao):- %nada aconteceu
+event(1, CondicaoVida, CheckBonus, Multiplicador, false, Pontuacao, Pontuacao):- %nada aconteceu
     animation(Multiplicador),
     noEvent,
     (Multiplicador == 0 -> none,
